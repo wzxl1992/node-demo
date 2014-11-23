@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head lang="en">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>To-Do List</title>
+
+        <!-- hotlink to Bootstrap CDN -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="css/main.css"/>
+
+        <!-- local version of AngularJS, unminified so that you can read it -->
+        <script src="lib/angular-1.3.1/angular.js"></script>
+    </head>
+    <body>
+        <main class="container-fluid" ng-app="ToDoApp" ng-controller="TasksController">
+            <header class="page-header">
+                <h1>My To-Do List</h1>
+            </header>
+
+            <p class="alert alert-danger" ng-if="errorMessage">{{errorMessage}}</p>
+
+            <section>
+                <h2>New Task</h2>
+
+                <form ng-submit="addTask(newTask)">
+                    <div class="form-group">
+                        <label for="task-title">Title</label>
+                        <input type="text" id="task-title" class="form-control"
+                               placeholder="title of new task" ng-model="newTask.title"/>
+                    </div>
+
+                    <div class="form-group">
+                        <img ng-if="inserting" src="img/ajax-loader.gif" alt="inserting animation"/>
+                        <button type="submit" class="btn btn-primary" ng-disabled="inserting">Add Task</button>
+                    </div>
+                </form>
+            </section>
+
+            <section>
+                <h2>Your Tasks</h2>
+
+                <p>
+                    <button class="btn btn-primary" ng-click="refreshTasks()" ng-disabled="loading">Refresh</button>
+                    <img ng-if="loading || updating" src="img/ajax-loader.gif" alt="loading animation"/>
+                </p>
+
+                <p ng-if="!tasks || 0 == tasks.length">Hooray, no tasks! Create a new one above.</p>
+
+                <table class="table" ng-if="tasks && tasks.length > 0">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Done</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="task in tasks" ng-class="{done: task.done, overdue: isOverdue(task)}">
+                            <td>{{task.title}}</td>
+                            <td><input type="checkbox" ng-model="task.done"
+                                       ng-true-value="1" ng-false-value="0"
+                                       ng-change="updateTask(task)"/></td>
+                        </tr>
+                    </tbody>
+
+                </table>
+            </section>
+        </main>
+
+        <script src="js/app.js"></script>
+    </body>
+</html>
