@@ -26,6 +26,7 @@ var db = new sqlite3.Database(dbPath, function(err) {
         var app = express();
 
         //use the JSON parser from bodyParser
+        app.use(bodyParser.json());
 
         //serve static files from the /static sub-directory
         app.use(express.static(__dirname + '/static'));
